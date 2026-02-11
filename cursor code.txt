@@ -1,0 +1,27 @@
+        """"""" START NEW LOGIC FOR YP28 DATE:10.02.2026
+        DATA:lw_scaval_9_test TYPE char15,
+             lv_val           TYPE char20,
+             lv_dec(3)        TYPE c,
+             lv_sca_val(6)    TYPE c,
+             lv_char1         TYPE char1,
+             lv_char_val(20)  TYPE c,
+             lv_num           TYPE p DECIMALS 0,
+             lv_formatted     TYPE char20.
+        CLEAR: lw_scaval_9_test,lv_val,lv_dec,lv_sca_val.
+        lw_scaval_9_test = lw_scaval_9.
+        CONDENSE lw_scaval_9_test.
+        " Below logic to convert (2000.000  A) to BDC Expected format ('2000 A')
+*         Keep only the numeric part before any type suffix (e.g. '000 A')
+        SPLIT lw_scaval_9_test AT '.' INTO lv_val lv_dec.
+        IF lv_dec EQ '000'.
+         lv_sca_val = lv_val.
+        ELSE.
+         lv_sca_val = lw_scaval_9_test.
+        ENDIF.
+        " Below logic to convert ( ' 2000  A') TO BDC EXPECTED FORMAT WHICH IS (' 2,000  A')
+        lv_num = lv_sca_val.
+        WRITE lv_num TO lv_formatted.
+        CONDENSE lv_formatted.
+        lv_char_val  = | { lv_formatted }  { <lfs_catyp> }|.
+        lw_scaval_9 = lv_char_val.
+        """"""" END   NEW LOGIC FOR YP28 DATE:10.02.2026
